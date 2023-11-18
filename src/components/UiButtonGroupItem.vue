@@ -1,12 +1,43 @@
 <template>
-  <div>Task 11-communication/01-UiButtonGroup | 11-provide-inject/01-UiButtonGroup</div>
+  <button
+    class="button-group__button"
+    :class="{ 'button-group__button_active': isActive }"
+    type="button"
+    aria-selected="false"
+    @click="setModelValue(value)"
+  >
+    <slot />
+  </button>
 </template>
 
 <script>
 // TODO: Task 11-communication/01-UiButtonGroup | 11-provide-inject/01-UiButtonGroup
+import { inject, computed } from 'vue';
 
 export default {
   name: 'UiButtonGroupItem',
+
+  props: {
+    value: {
+      required: true,
+    },
+  },
+
+  setup(props) {
+    // inject
+    const { modelValue, setModelValue } = inject('modelValue');
+
+    // Computed
+    const isActive = computed(() => {
+      return props.value === modelValue.value;
+    });
+
+    return {
+      modelValue,
+      setModelValue,
+      isActive,
+    };
+  },
 };
 </script>
 
