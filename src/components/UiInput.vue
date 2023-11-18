@@ -1,12 +1,100 @@
 <template>
-  <div>Task 06-wrappers/03-UiInput</div>
+  <div
+    class="input-group"
+    :class="[
+      {
+        'input-group_icon': hasIcon(),
+        'input-group_icon-left': hasLeftIcon(),
+        'input-group_icon-right': hasRightIcon(),
+      },
+      $attrs.class,
+    ]"
+  >
+    <div v-if="hasLeftIcon()" class="input-group__icon">
+      <slot name="left-icon" />
+    </div>
+
+    <component
+      :is="tag"
+      ref="input"
+      class="form-control"
+      v-bind="{ ...$attrs, class: inputClasses }"
+      :value="modelValue"
+      @input="$emit('update:modelValue', $event.target.value)"
+    />
+
+    <div v-if="hasRightIcon()" class="input-group__icon">
+      <slot name="right-icon" />
+    </div>
+  </div>
 </template>
 
 <script>
 // TODO: Task 06-wrappers/03-UiInput
+import { ref, computed } from 'vue';
 
 export default {
   name: 'UiInput',
+
+  inheritAttrs: false,
+
+  props: {
+    modelValue: String,
+
+    small: {
+      type: Boolean,
+    },
+
+    rounded: {
+      type: Boolean,
+    },
+
+    multiline: {
+      type: Boolean,
+    },
+  },
+
+  emits: ['update:modelValue'],
+
+  setup(props, { emit, slots }) {
+    // templRef
+    const input = ref(null);
+
+    // Computed
+    const tag = computed(() => {
+      return props.multiline ? 'textarea' : 'input';
+    });
+
+    // Computed
+    const inputClasses = computed(() => {
+      return {
+        'form-control_rounded': props.rounded,
+        'form-control_sm': props.small,
+      };
+    });
+
+    // Methods
+    const hasLeftIcon = () => {
+      return !!slots['left-icon'];
+    };
+
+    const hasRightIcon = () => {
+      return !!slots['right-icon'];
+    };
+
+    const hasIcon = () => {
+      return hasLeftIcon() || hasRightIcon();
+    };
+
+    return {
+      input,
+      tag,
+      inputClasses,
+      hasLeftIcon,
+      hasRightIcon,
+      hasIcon,
+    };
+  },
 };
 </script>
 
@@ -78,11 +166,13 @@ textarea.form-control {
   transform: translate(0, -50%);
 }
 
-.input-group.input-group_icon.input-group_icon-left .input-group__icon:first-child {
+.input-group.input-group_icon.input-group_icon-left
+  .input-group__icon:first-child {
   left: 16px;
 }
 
-.input-group.input-group_icon.input-group_icon-right .input-group__icon:last-child {
+.input-group.input-group_icon.input-group_icon-right
+  .input-group__icon:last-child {
   right: 16px;
 }
 </style>
