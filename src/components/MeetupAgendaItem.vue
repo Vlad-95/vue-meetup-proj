@@ -1,13 +1,59 @@
 <template>
-  <div>Task 02-components/05-MeetupAgenda</div>
+  <div class="agenda-item">
+    <div class="agenda-item__col">
+      <UiIcon :icon="agendaIcon" />
+    </div>
+    <div class="agenda-item__col">
+      {{ agendaItem.startsAt }} - {{ agendaItem.endsAt }}
+    </div>
+    <div class="agenda-item__col">
+      <h3 class="agenda-item__title">{{ agendaTitle }}</h3>
+      <p v-if="agendaItem.type === 'talk'" class="agenda-item__talk">
+        <span>{{ agendaItem.speaker }}</span>
+        <span class="agenda-item__dot"></span>
+        <span class="agenda-item__lang">{{ agendaItem.language }}</span>
+      </p>
+      <p v-if="agendaItem.description">{{ agendaItem.description }}</p>
+    </div>
+  </div>
 </template>
 
 <script>
 // TODO: Task 02-components/05-MeetupAgenda
 // TODO: add <UiIcon> component
+import {
+  agendaItemDefaultTitles,
+  agendaItemIcons,
+} from '../services/meetupService';
+import UiIcon from './UiIcon.vue';
 
 export default {
   name: 'MeetupAgendaItem',
+
+  components: {
+    UiIcon,
+  },
+
+  props: {
+    agendaItem: {
+      type: Object,
+      required: true,
+    },
+  },
+
+  setup(props) {
+    const iconsLib = agendaItemIcons;
+    const defaultTitles = agendaItemDefaultTitles;
+
+    // Computed
+    const agendaIcon = iconsLib[props.agendaItem.type];
+    const agendaTitle = defaultTitles[props.agendaItem.type];
+
+    return {
+      agendaIcon,
+      agendaTitle,
+    };
+  },
 };
 </script>
 

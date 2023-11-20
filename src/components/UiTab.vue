@@ -1,5 +1,7 @@
 <template>
-  <div>Task UiTabs</div>
+  <RouterLink class="tabs__tab" exactActiveClass="tabs__tab_active" role="tab">
+    <slot />
+  </RouterLink>
 </template>
 
 <script>

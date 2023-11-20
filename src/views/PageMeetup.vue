@@ -29,6 +29,7 @@ import UiContainer from '../components/UiContainer.vue';
 import UiAlert from '../components/UiAlert.vue';
 import UiTabs from '../components/UiTabs.vue';
 import UiTab from '../components/UiTab.vue';
+import UiButton from '../components/UiButton.vue';
 import { getMeetup } from '../api/meetupsApi.js';
 
 export default {
@@ -40,6 +41,7 @@ export default {
     MeetupView,
     UiAlert,
     UiContainer,
+    UiButton,
   },
 
   async beforeRouteEnter(to) {

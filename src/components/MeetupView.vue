@@ -8,15 +8,31 @@
           <slot />
         </div>
         <div class="meetup__aside">
-          <MeetupInfo :organizer="meetup.organizer" :place="meetup.place" :date="meetup.date" />
+          <MeetupInfo
+            :organizer="meetup.organizer"
+            :place="meetup.place"
+            :date="meetup.date"
+          />
           <!-- TODO: Добавить проверку на аутентификацию и является ли пользователь организатором митапа -->
           <!-- TODO: Реализовать кнопки (некоторые должны быть ссылками) -->
           <div class="meetup__aside-buttons">
             <!-- TODO: Может добавить тут слот? -->
-            <UiButton variant="primary" class="meetup__aside-button">Редактировать</UiButton>
-            <UiButton variant="danger" class="meetup__aside-button">Удалить</UiButton>
-            <UiButton variant="secondary" class="meetup__aside-button">Отменить участие</UiButton>
-            <UiButton variant="primary" class="meetup__aside-button"> Участвовать </UiButton>
+            <UiButton
+              tag="router-link"
+              to="/"
+              variant="primary"
+              class="meetup__aside-button"
+              >Редактировать</UiButton
+            >
+            <UiButton variant="danger" class="meetup__aside-button"
+              >Удалить</UiButton
+            >
+            <UiButton variant="secondary" class="meetup__aside-button"
+              >Отменить участие</UiButton
+            >
+            <UiButton variant="primary" class="meetup__aside-button">
+              Участвовать
+            </UiButton>
           </div>
         </div>
       </div>

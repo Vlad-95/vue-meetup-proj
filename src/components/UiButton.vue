@@ -1,12 +1,48 @@
 <template>
-  <div><slot /> (Task 06-wrappers/02-UiButton)</div>
+  <component
+    :is="tag"
+    :type="buttonFlag"
+    class="button"
+    :class="[{ button_block: block }, variantClass]"
+  >
+    <slot />
+  </component>
 </template>
 
 <script>
 // TODO: Task 06-wrappers/02-UiButton
+import { computed } from 'vue';
 
 export default {
   name: 'UiButton',
+
+  props: {
+    tag: {
+      type: [String, Object, Function],
+      default: 'button',
+    },
+
+    variant: {
+      type: String,
+      default: 'secondary',
+    },
+
+    block: {
+      type: Boolean,
+    },
+  },
+
+  setup(props) {
+    // Computed
+    const buttonFlag = computed(() => {
+      if (props.tag == 'button') {
+        return 'button';
+      }
+    });
+    const variantClass = computed(() => `button_${props.variant}`);
+
+    return { buttonFlag, variantClass };
+  },
 };
 </script>
 
