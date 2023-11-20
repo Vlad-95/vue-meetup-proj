@@ -48,6 +48,17 @@ export const routes = [
   },
   // TODO: Task 05-vue-router/01-AuthPages
   {
+    path: '/login',
+    name: 'login',
+    component: () => import('../views/PageLogin.vue'),
+    props: (route) => ({ query: route.query.from }),
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: () => import('../views/PageRegister.vue'),
+  },
+  {
     path: '/meetups/create',
     // TODO: Добавить страницу создания митапа
   },
