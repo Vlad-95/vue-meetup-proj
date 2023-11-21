@@ -1,6 +1,6 @@
 <template>
   <LayoutAuth :title="'Вход | Meetups'">
-    <UiForm>
+    <UiForm @submit.prevent="handleSubmit">
       <UiFormGroup label="Email">
         <UiInput
           v-model="email"
@@ -35,6 +35,9 @@
 <script>
 // TODO: Task 05-vue-router/01-AuthPages
 // TODO: Добавить именованные маршруты
+import { useAuthStore } from '../stores/useAuthStore';
+import { useRouter } from 'vue-router';
+
 import { ref } from 'vue';
 import UiFormGroup from '../components/UiFormGroup.vue';
 import UiLink from '../components/UiLink.vue';
@@ -67,13 +70,26 @@ export default {
             - В случае неуспешной аутентификации:
               - Вывести тост "Неверные учётные данные..."
      */
+    const router = useRouter();
+    const authStore = useAuthStore();
 
-    const email = ref('');
-    const password = ref('');
+    const email = ref('demo@email');
+    const password = ref('password');
+
+    // Methods
+    const handleSubmit = async () => {
+      try {
+        await authStore.login(email.value, password.value);
+        router.push({ name: 'index' });
+      } catch (e) {
+        console.log(e);
+      }
+    };
 
     return {
       email,
       password,
+      handleSubmit,
     };
   },
 };
