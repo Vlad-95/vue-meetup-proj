@@ -1,16 +1,26 @@
 <template>
   <nav class="nav">
-    <RouterLink v-if="$route.meta.showReturnToMeetups" to="/meetups" class="nav__link">
+    <RouterLink
+      v-if="$route.meta.showReturnToMeetups"
+      to="/meetups"
+      class="nav__link"
+    >
       &larr; Вернуться к списку
     </RouterLink>
     <!-- Ссылки гостя -->
     <RouterLink to="/login" class="nav__link">Вход</RouterLink>
     <RouterLink to="/register" class="nav__link">Регистрация</RouterLink>
     <!-- Ссылки авторизованного пользователя -->
-    <RouterLink to="/meetups?participation=attending" class="nav__link"> Мои митапы </RouterLink>
-    <RouterLink to="/meetups?participation=organizing" class="nav__link"> Организуемые митапы </RouterLink>
-    <RouterLink to="/meetups/create" class="nav__link">Создать митап</RouterLink>
-    <a href="#" class="nav__link">fullname (выйти)</a>
+    <RouterLink to="/meetups?participation=attending" class="nav__link">
+      Мои митапы
+    </RouterLink>
+    <RouterLink to="/meetups?participation=organizing" class="nav__link">
+      Организуемые митапы
+    </RouterLink>
+    <RouterLink to="/meetups/create" class="nav__link"
+      >Создать митап</RouterLink
+    >
+    <a href="#" @click.prevent="logOut" class="nav__link">fullname (выйти)</a>
     <!-- Ссылка - не часть проекта -->
     <RouterLink to="/demo" class="nav__link">🎨 Components Demo</RouterLink>
   </nav>
@@ -27,6 +37,17 @@
 
 export default {
   name: 'MeetupsNav',
+
+  setup() {
+    // Methods
+    const logOut = () => {
+      console.log(1);
+    };
+
+    return {
+      logOut,
+    };
+  },
 };
 </script>
 
