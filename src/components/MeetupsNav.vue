@@ -20,7 +20,7 @@
     <RouterLink to="/meetups/create" class="nav__link"
       >Создать митап</RouterLink
     >
-    <a href="#" @click.prevent="logOut" class="nav__link">fullname (выйти)</a>
+    <a href="#" @click.prevent="logout" class="nav__link"> (выйти)</a>
     <!-- Ссылка - не часть проекта -->
     <RouterLink to="/demo" class="nav__link">🎨 Components Demo</RouterLink>
   </nav>
@@ -34,18 +34,31 @@
         - Кнопка выхода
   TODO: Добавить именованные маршруты
 */
+import { computed, watch } from 'vue';
+import { useAuthStore } from '../stores/useAuthStore';
+import { storeToRefs } from 'pinia';
 
 export default {
   name: 'MeetupsNav',
 
   setup() {
+    // Store
+    const authStore = useAuthStore();
+    const { user } = storeToRefs(authStore);
+
+    // Computed
+    watch(user, () => {
+      console.log('changed');
+    });
+
     // Methods
-    const logOut = () => {
-      console.log(1);
+    const logout = async () => {
+      await authStore.logout();
     };
 
     return {
-      logOut,
+      logout,
+      // fullnameUser,
     };
   },
 };

@@ -17,6 +17,7 @@
 import LayoutBase from './components/LayoutBase.vue';
 import UiAlert from './components/UiAlert.vue';
 import { httpClient } from './api/httpClient/httpClient.js';
+// import { useAuthStore } from '../stores/useAuthStore';
 
 export default {
   name: 'App',

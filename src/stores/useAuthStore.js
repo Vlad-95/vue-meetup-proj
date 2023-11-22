@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
-import { loginUser } from '../api/authApi';
+import { loginUser, logoutUser, getUser } from '../api/authApi';
 
 export const useAuthStore = defineStore('auth', () => {
   const user = ref(null);
@@ -14,12 +14,22 @@ export const useAuthStore = defineStore('auth', () => {
     user.value = await loginUser(email, password);
   };
 
+  const logout = async () => {
+    await logoutUser();
+    setUser(null);
+  };
+
   // TODO: Добавить метод актуализации данных пользователя с API
+  const getCurrentUser = async () => {
+    return await getUser();
+  };
 
   return {
     user,
     isAuthenticated,
     setUser,
     login,
+    logout,
+    getCurrentUser,
   };
 });
