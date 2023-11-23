@@ -3,8 +3,8 @@
     <UiCalendarEvent
       v-for="meetup in meetupsByDate[timestamp]"
       :key="meetup.id"
-      tag="a"
-      :href="`/meetups/${meetup.id}`"
+      tag="router-link"
+      :to="{ name: 'meetup', params: { meetupId: meetup.id } }"
       >{{ meetup.title }}
     </UiCalendarEvent>
   </UiCalendarView>
