@@ -17,7 +17,8 @@
 import LayoutBase from './components/LayoutBase.vue';
 import UiAlert from './components/UiAlert.vue';
 import { httpClient } from './api/httpClient/httpClient.js';
-// import { useAuthStore } from '../stores/useAuthStore';
+import { useAuthStore } from './stores/useAuthStore';
+import { onMounted } from 'vue';
 
 export default {
   name: 'App',
@@ -28,9 +29,23 @@ export default {
   },
 
   setup() {
+    // Store
+    const authStore = useAuthStore();
+    // const { user } = storeToRefs(authStore);
+
     // TODO: Установить <title> - "Meetups"
 
     // TODO: для авторизованных пользователей - запросить новые данные пользователя для актуализации и проверки актуальности
+    onMounted(async () => {
+      try {
+        const response = await authStore.getAuthUser();
+        console.log(response);
+
+        authStore.setUser(response);
+      } catch (e) {
+        console.log(e);
+      }
+    });
 
     httpClient.onUnauthenticated(() => {
       // TODO: сессия пользователя больше не валидна - нужна обработка потери авторизации

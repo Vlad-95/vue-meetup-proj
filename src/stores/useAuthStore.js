@@ -20,7 +20,7 @@ export const useAuthStore = defineStore('auth', () => {
   };
 
   // TODO: Добавить метод актуализации данных пользователя с API
-  const getCurrentUser = async () => {
+  const getAuthUser = async () => {
     return await getUser();
   };
 
@@ -30,6 +30,6 @@ export const useAuthStore = defineStore('auth', () => {
     setUser,
     login,
     logout,
-    getCurrentUser,
+    getAuthUser,
   };
 });

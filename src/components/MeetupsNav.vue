@@ -8,19 +8,33 @@
       &larr; Вернуться к списку
     </RouterLink>
     <!-- Ссылки гостя -->
-    <RouterLink to="/login" class="nav__link">Вход</RouterLink>
-    <RouterLink to="/register" class="nav__link">Регистрация</RouterLink>
+    <RouterLink :to="{ name: 'login' }" v-if="!user" class="nav__link"
+      >Вход</RouterLink
+    >
+    <RouterLink :to="{ name: 'register' }" v-if="!user" class="nav__link"
+      >Регистрация</RouterLink
+    >
     <!-- Ссылки авторизованного пользователя -->
-    <RouterLink to="/meetups?participation=attending" class="nav__link">
+    <RouterLink
+      :to="{ name: 'meetups', query: { participation: 'attending' } }"
+      v-if="user"
+      class="nav__link"
+    >
       Мои митапы
     </RouterLink>
-    <RouterLink to="/meetups?participation=organizing" class="nav__link">
+    <RouterLink
+      :to="{ name: 'meetups', query: { participation: 'organizing' } }"
+      v-if="user"
+      class="nav__link"
+    >
       Организуемые митапы
     </RouterLink>
-    <RouterLink to="/meetups/create" class="nav__link"
+    <RouterLink :to="{ name: 'meetupCreate' }" v-if="user" class="nav__link"
       >Создать митап</RouterLink
     >
-    <a href="#" @click.prevent="logout" class="nav__link"> (выйти)</a>
+    <a href="#" @click.prevent="logout" v-if="user" class="nav__link">
+      {{ user.data.fullname }} (выйти)</a
+    >
     <!-- Ссылка - не часть проекта -->
     <RouterLink to="/demo" class="nav__link">🎨 Components Demo</RouterLink>
   </nav>
@@ -34,7 +48,6 @@
         - Кнопка выхода
   TODO: Добавить именованные маршруты
 */
-import { computed, watch } from 'vue';
 import { useAuthStore } from '../stores/useAuthStore';
 import { storeToRefs } from 'pinia';
 
@@ -46,11 +59,6 @@ export default {
     const authStore = useAuthStore();
     const { user } = storeToRefs(authStore);
 
-    // Computed
-    watch(user, () => {
-      console.log('changed');
-    });
-
     // Methods
     const logout = async () => {
       await authStore.logout();
@@ -58,7 +66,7 @@ export default {
 
     return {
       logout,
-      // fullnameUser,
+      user,
     };
   },
 };
