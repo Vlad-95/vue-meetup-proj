@@ -1,12 +1,125 @@
 <template>
-  <div>Task 10-slots/03-UiCalendarView</div>
+  <div class="calendar-view">
+    <div class="calendar-view__controls">
+      <div class="calendar-view__controls-inner">
+        <button
+          class="calendar-view__control-left"
+          type="button"
+          aria-label="Previous month"
+          @click.stop="setPreviousMonth"
+        ></button>
+        <div class="calendar-view__date">{{ localDate }}</div>
+        <button
+          class="calendar-view__control-right"
+          type="button"
+          aria-label="Next month"
+          @click.stop="setNextMonth"
+        ></button>
+      </div>
+    </div>
+
+    <div class="calendar-view__grid">
+      <div
+        v-for="cell in calendarCells"
+        :key="cell.timestamp"
+        class="calendar-view__cell"
+        :class="{ 'calendar-view__cell_inactive': !cell.isCurrentMonth }"
+        :aria-label="cell.localDateString"
+        tabindex="0"
+      >
+        <div class="calendar-view__cell-day">{{ cell.date }}</div>
+        <div class="calendar-view__cell-content">
+          <slot
+            :timestamp="cell.timestamp"
+            :year="cell.year"
+            :month="cell.month"
+            :date="cell.date"
+            :inactive="!cell.isCurrentMonth"
+          ></slot>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
 // TODO: Task 10-slots/03-UiCalendarView
+import { ref, computed } from 'vue';
+import {
+  addDays,
+  addMonths,
+  getFirstDateOfMonth,
+  getLastDateOfMonth,
+  getWeekday,
+} from '../utils/dateUtils.js';
 
 export default {
   name: 'UiCalendarView',
+
+  setup() {
+    // State
+    const currentDate = ref(getFirstDateOfMonth(new Date()));
+
+    // Computed
+    const localDate = computed(() =>
+      currentDate.value.toLocaleDateString(navigator.language, {
+        month: 'long',
+        year: 'numeric',
+      })
+    );
+
+    const calendarCells = computed(() => {
+      const lastDateOfMonth = getLastDateOfMonth(currentDate.value);
+      const startDate = addDays(
+        currentDate.value,
+        -(getWeekday(currentDate.value) - 1)
+      );
+      const finishDate = addDays(
+        lastDateOfMonth,
+        7 - getWeekday(lastDateOfMonth)
+      );
+
+      const cells = [];
+
+      for (
+        let dayOfCalendar = startDate;
+        dayOfCalendar <= finishDate;
+        dayOfCalendar = addDays(dayOfCalendar, 1)
+      ) {
+        cells.push({
+          timestamp: +dayOfCalendar,
+          year: dayOfCalendar.getUTCFullYear(),
+          month: dayOfCalendar.getUTCMonth(),
+          date: dayOfCalendar.getUTCDate(),
+          isCurrentMonth:
+            dayOfCalendar.getUTCMonth() === currentDate.value.getUTCMonth(),
+          localDateString: dayOfCalendar.toLocaleDateString(
+            navigator.language,
+            { dateStyle: 'long' }
+          ),
+        });
+      }
+
+      return cells;
+    });
+
+    // Methods
+    const setPreviousMonth = () => {
+      currentDate.value = addMonths(currentDate.value, -1);
+    };
+
+    const setNextMonth = () => {
+      currentDate.value = addMonths(currentDate.value, 1);
+    };
+
+    return {
+      localDate,
+      currentDate,
+      calendarCells,
+      setPreviousMonth,
+      setNextMonth,
+    };
+  },
 };
 </script>
 
