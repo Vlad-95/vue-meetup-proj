@@ -1,37 +1,12 @@
 <template>
-  <div class="meetup-cover">
-    <h1 class="meetup-cover__title">{{ title }}</h1>
-  </div>
+  <div>Task 02-components/03-MeetupCover</div>
 </template>
 
 <script>
 // TODO: Task 02-components/03-MeetupCover
-import { computed } from 'vue';
 
 export default {
   name: 'MeetupCover',
-
-  props: {
-    title: {
-      type: String,
-      required: false,
-    },
-
-    image: {
-      type: String,
-      requred: false,
-    },
-  },
-
-  setup(props) {
-    const bgImage = computed(() => {
-      return props.image ? `url(${props.image})` : 'var(--default-cover)';
-    });
-
-    return {
-      bgImage,
-    };
-  },
 };
 </script>
 
@@ -43,12 +18,7 @@ export default {
   --bg-url: var(--default-cover);
   background-size: cover;
   background-position: center;
-  background-image: linear-gradient(
-      0deg,
-      rgba(0, 0, 0, 0.4),
-      rgba(0, 0, 0, 0.4)
-    ),
-    v-bind(bgImage);
+  background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), var(--bg-url);
   display: flex;
   flex-direction: column;
   align-items: center;
