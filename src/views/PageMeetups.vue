@@ -72,7 +72,7 @@
 </template>
 
 <script>
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import MeetupsList from '../components/MeetupsList.vue';
 import MeetupsCalendar from '../components/MeetupsCalendar.vue';
 import UiRadioGroup from '../components/UiRadioGroup.vue';
@@ -86,6 +86,8 @@ import UiInput from '../components/UiInput.vue';
 import UiTransitionGroupFade from '../components/UiTransitionGroupFade.vue';
 import { useMeetupsFetch } from '../composables/useMeetupsFetch.js';
 import { useMeetupsFilter } from '../composables/useMeetupsFilter.js';
+import { useQuerySync } from '../composables/useQuerySync';
+import { useRoute, useRouter } from 'vue-router';
 
 export default {
   name: 'PageMeetups',
@@ -103,6 +105,8 @@ export default {
   },
 
   setup() {
+    // const router = useRouter();
+    // const route = useRoute();
     const { meetups } = useMeetupsFetch();
 
     const { filteredMeetups, filter, dateFilterOptions } =
@@ -119,6 +123,19 @@ export default {
              - Вынесите эту логику в универсальный компосабл useQuerySync
              - Будущая задача composition/useQuerySync
      */
+    const { queryStringView } = useQuerySync();
+
+    watch(view, () => {
+      queryStringView.value = view.value;
+    });
+
+    watch(
+      filter,
+      () => {
+        queryStringView.value = view.value;
+      },
+      { deep: true }
+    );
 
     const viewComponent = computed(() => {
       const viewToComponents = {
@@ -135,6 +152,7 @@ export default {
       dateFilterOptions,
       view,
       viewComponent,
+      // queryString,
     };
   },
 };
