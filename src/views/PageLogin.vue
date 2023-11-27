@@ -32,7 +32,7 @@
       <template #append>
         Нет аккаунта?
         <UiLink
-          to="/register"
+          :to="{ name: 'register' }"
           class="link"
           >Зарегистрируйтесь</UiLink
         >

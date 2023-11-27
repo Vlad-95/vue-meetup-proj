@@ -52,7 +52,7 @@
 
       <template #append>
         Уже есть аккаунт?
-        <UiLink to="/login">Войдите</UiLink>
+        <UiLink :to="{ name: 'login' }">Войдите</UiLink>
       </template>
     </UiForm>
   </LayoutAuth>
