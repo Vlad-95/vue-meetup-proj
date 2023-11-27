@@ -10,48 +10,52 @@
 </template>
 
 <script>
-import UiContainer from '../components/UiContainer.vue';
+  import UiContainer from '../components/UiContainer.vue';
+  import { useHead } from '@unhead/vue';
 
-export default {
-  name: 'PageNotFound',
+  export default {
+    name: 'PageNotFound',
 
-  components: {
-    UiContainer,
-  },
+    components: {
+      UiContainer,
+    },
 
-  setup() {
-    // TODO: <title> "Страница не найдена | Meetups"
-  },
-};
+    setup() {
+      // TODO: <title> "Страница не найдена | Meetups"
+      useHead({
+        title: 'Страница не найдена | Meetups',
+      });
+    },
+  };
 </script>
 
 <style scoped>
-/* page_not-found.css */
-.page-error {
-  padding: 100px 0;
-}
+  /* page_not-found.css */
+  .page-error {
+    padding: 100px 0;
+  }
 
-.page-error__title {
-  font-family: Nunito, sans-serif;
-  font-weight: 700;
-  font-size: 52px;
-  line-height: 1.2;
-  text-align: center;
-  color: var(--body-color);
-}
-
-.page-error__status-code {
-  display: block;
-  font-size: 144px;
-}
-
-@media all and (max-width: 767px) {
   .page-error__title {
-    font-size: 36px;
+    font-family: Nunito, sans-serif;
+    font-weight: 700;
+    font-size: 52px;
+    line-height: 1.2;
+    text-align: center;
+    color: var(--body-color);
   }
 
   .page-error__status-code {
-    font-size: 108px;
+    display: block;
+    font-size: 144px;
   }
-}
+
+  @media all and (max-width: 767px) {
+    .page-error__title {
+      font-size: 36px;
+    }
+
+    .page-error__status-code {
+      font-size: 108px;
+    }
+  }
 </style>

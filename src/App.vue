@@ -2,7 +2,10 @@
   <LayoutBase>
     <RouterView>
       <template #default="{ Component }">
-        <KeepAlive v-if="Component" :max="3">
+        <KeepAlive
+          v-if="Component"
+          :max="3"
+        >
           <component :is="Component" />
         </KeepAlive>
       </template>
@@ -14,57 +17,61 @@
 </template>
 
 <script>
-import LayoutBase from './components/LayoutBase.vue';
-import UiAlert from './components/UiAlert.vue';
-import { httpClient } from './api/httpClient/httpClient.js';
-import { useAuthStore } from './stores/useAuthStore';
-import { onMounted } from 'vue';
+  import LayoutBase from './components/LayoutBase.vue';
+  import UiAlert from './components/UiAlert.vue';
+  import { httpClient } from './api/httpClient/httpClient.js';
+  import { useAuthStore } from './stores/useAuthStore';
+  import { onMounted } from 'vue';
+  import { useHead } from '@unhead/vue';
 
-export default {
-  name: 'App',
+  export default {
+    name: 'App',
 
-  components: {
-    UiAlert,
-    LayoutBase,
-  },
+    components: {
+      UiAlert,
+      LayoutBase,
+    },
 
-  setup() {
-    // Store
-    const authStore = useAuthStore();
-    // const { user } = storeToRefs(authStore);
+    setup() {
+      // Store
+      const authStore = useAuthStore();
+      // const { user } = storeToRefs(authStore);
 
-    // TODO: Установить <title> - "Meetups"
+      // TODO: Установить <title> - "Meetups" == Готово
+      useHead({
+        title: 'Meetups',
+      });
 
-    // TODO: для авторизованных пользователей - запросить новые данные пользователя для актуализации и проверки актуальности
-    onMounted(async () => {
-      try {
-        const response = await authStore.getAuthUser();
-        console.log(response);
+      // TODO: для авторизованных пользователей - запросить новые данные пользователя для актуализации и проверки актуальности
+      onMounted(async () => {
+        try {
+          const response = await authStore.getAuthUser();
+          console.log(response);
 
-        authStore.setUser(response);
-      } catch (e) {
-        console.log(e);
-      }
-    });
+          authStore.setUser(response);
+        } catch (e) {
+          console.log(e);
+        }
+      });
 
-    httpClient.onUnauthenticated(() => {
-      // TODO: сессия пользователя больше не валидна - нужна обработка потери авторизации
-    });
+      httpClient.onUnauthenticated(() => {
+        // TODO: сессия пользователя больше не валидна - нужна обработка потери авторизации
+      });
 
-    httpClient.onNetworkError(() => {
-      // TODO: проблема с сетью, стоит вывести тост пользователю
-    });
+      httpClient.onNetworkError(() => {
+        // TODO: проблема с сетью, стоит вывести тост пользователю
+      });
 
-    // TODO: обработка глобальных ошибок - необработанные исключения можно залогировать и вывести тост
-    // TODO: глобальные ошибки можно поймать событиями "error" и "unhandledrejection"
-  },
-};
+      // TODO: обработка глобальных ошибок - необработанные исключения можно залогировать и вывести тост
+      // TODO: глобальные ошибки можно поймать событиями "error" и "unhandledrejection"
+    },
+  };
 </script>
 
 <style>
-/* Основные глобальные стили - не scoped стили  */
-/* app.css */
-@import url('./assets/styles/_variables.css');
-@import url('./assets/styles/_fonts.css');
-@import url('./assets/styles/_common.css');
+  /* Основные глобальные стили - не scoped стили  */
+  /* app.css */
+  @import url('./assets/styles/_variables.css');
+  @import url('./assets/styles/_fonts.css');
+  @import url('./assets/styles/_common.css');
 </style>

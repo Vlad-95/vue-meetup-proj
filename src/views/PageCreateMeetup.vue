@@ -3,30 +3,34 @@
 </template>
 
 <script>
-import { ref } from 'vue';
-import MeetupForm from '../components/MeetupForm.vue';
-import { createMeetup } from '../services/meetupService.js';
+  import { ref } from 'vue';
+  import MeetupForm from '../components/MeetupForm.vue';
+  import { createMeetup } from '../services/meetupService.js';
+  import { useHead } from '@unhead/vue';
 
-export default {
-  name: 'PageCreateMeetup',
+  export default {
+    name: 'PageCreateMeetup',
 
-  components: {
-    MeetupForm,
-  },
+    components: {
+      MeetupForm,
+    },
 
-  setup() {
-    // TODO: title "Создание митапа | Meetups"
-    // TODO: Добавить LayoutMeetupForm
-    const meetup = ref(createMeetup());
+    setup() {
+      // TODO: title "Создание митапа | Meetups" == Готово
+      useHead({
+        title: 'Создание митапа | Meetups',
+      });
+      // TODO: Добавить LayoutMeetupForm
+      const meetup = ref(createMeetup());
 
-    // TODO: При сабмите формы создания митапа - добавить его через API и перейти на страницу созданного митапа
-    // TODO: При нажатии на "Отмена" вернуться на главную страницу
+      // TODO: При сабмите формы создания митапа - добавить его через API и перейти на страницу созданного митапа
+      // TODO: При нажатии на "Отмена" вернуться на главную страницу
 
-    return {
-      meetup,
-    };
-  },
-};
+      return {
+        meetup,
+      };
+    },
+  };
 </script>
 
 <style scoped></style>

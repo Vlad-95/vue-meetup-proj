@@ -1,5 +1,5 @@
 <template>
-  <LayoutAuth :title="'Вход | Meetups'">
+  <LayoutAuth :title="'Вход'">
     <UiForm @submit.prevent="handleSubmit">
       <UiFormGroup label="Email">
         <UiInput
@@ -21,48 +21,61 @@
       </UiFormGroup>
 
       <template #buttons>
-        <UiButton variant="primary" type="submit" block>Войти</UiButton>
+        <UiButton
+          variant="primary"
+          type="submit"
+          block
+          >Войти</UiButton
+        >
       </template>
 
       <template #append>
         Нет аккаунта?
-        <UiLink to="/register" class="link">Зарегистрируйтесь</UiLink>
+        <UiLink
+          to="/register"
+          class="link"
+          >Зарегистрируйтесь</UiLink
+        >
       </template>
     </UiForm>
   </LayoutAuth>
 </template>
 
 <script>
-// TODO: Task 05-vue-router/01-AuthPages
-// TODO: Добавить именованные маршруты
-import { useAuthStore } from '../stores/useAuthStore';
-import { useRouter } from 'vue-router';
+  // TODO: Task 05-vue-router/01-AuthPages
+  // TODO: Добавить именованные маршруты
+  import { useAuthStore } from '../stores/useAuthStore';
+  import { useRouter } from 'vue-router';
 
-import { ref } from 'vue';
-import UiFormGroup from '../components/UiFormGroup.vue';
-import UiLink from '../components/UiLink.vue';
-import UiInput from '../components/UiInput.vue';
-import UiButton from '../components/UiButton.vue';
-import UiForm from '../components/UiForm.vue';
-import LayoutAuth from '../components/LayoutAuth.vue';
+  import { ref } from 'vue';
+  import UiFormGroup from '../components/UiFormGroup.vue';
+  import UiLink from '../components/UiLink.vue';
+  import UiInput from '../components/UiInput.vue';
+  import UiButton from '../components/UiButton.vue';
+  import UiForm from '../components/UiForm.vue';
+  import LayoutAuth from '../components/LayoutAuth.vue';
+  import { useHead } from '@unhead/vue';
 
-export default {
-  name: 'PageLogin',
+  export default {
+    name: 'PageLogin',
 
-  components: {
-    UiForm,
-    UiButton,
-    UiInput,
-    UiLink,
-    UiFormGroup,
-    LayoutAuth,
-  },
+    components: {
+      UiForm,
+      UiButton,
+      UiInput,
+      UiLink,
+      UiFormGroup,
+      LayoutAuth,
+    },
 
-  setup() {
-    // TODO: <title> "Вход | Meetups"
-    // TODO: Добавить LayoutAuth
+    setup() {
+      // TODO: <title> "Вход | Meetups" == Готово
+      useHead({
+        title: 'Вход | Meetups',
+      });
+      // TODO: Добавить LayoutAuth == Готово
 
-    /*
+      /*
       TODO: Добавить обработчик сабмита
             - В случае успешной аутентификации:
               - Перейти на главную страницу или from (Task 05-vue-router/01-AuthPages)
@@ -70,29 +83,29 @@ export default {
             - В случае неуспешной аутентификации:
               - Вывести тост "Неверные учётные данные..."
      */
-    const router = useRouter();
-    const authStore = useAuthStore();
+      const router = useRouter();
+      const authStore = useAuthStore();
 
-    const email = ref('demo@email');
-    const password = ref('password');
+      const email = ref('demo@email');
+      const password = ref('password');
 
-    // Methods
-    const handleSubmit = async () => {
-      try {
-        await authStore.login(email.value, password.value);
-        router.push({ name: 'index' });
-      } catch (e) {
-        console.log(e);
-      }
-    };
+      // Methods
+      const handleSubmit = async () => {
+        try {
+          await authStore.login(email.value, password.value);
+          router.push({ name: 'index' });
+        } catch (e) {
+          console.log(e);
+        }
+      };
 
-    return {
-      email,
-      password,
-      handleSubmit,
-    };
-  },
-};
+      return {
+        email,
+        password,
+        handleSubmit,
+      };
+    },
+  };
 </script>
 
 <style scoped></style>
