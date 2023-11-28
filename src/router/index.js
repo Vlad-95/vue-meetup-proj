@@ -46,7 +46,7 @@ export const routes = [
       },
     ],
   },
-  // TODO: Task 05-vue-router/01-AuthPages
+  // TODO: Task 05-vue-router/01-AuthPages = Готово
   {
     path: '/login',
     name: 'login',
@@ -61,7 +61,8 @@ export const routes = [
   {
     path: '/meetups/create',
     name: 'meetupCreate',
-    // TODO: Добавить страницу создания митапа
+    // TODO: Добавить страницу создания митапа = Готово
+    component: () => import('../views/PageCreateMeetup.vue'),
   },
   {
     path: '/meetups/:meetupId(\\d+)/edit',
