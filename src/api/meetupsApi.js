@@ -23,7 +23,8 @@ export function getMeetup(id) {
  * @returns {Promise<ResultContainer<Meetup>>}
  */
 export function postMeetup(meetup) {
-  // TODO: реализовать функцию
+  // TODO: реализовать функцию = Готово
+  return httpClient.post(`/meetups`, meetup);
 }
 
 /**
@@ -33,6 +34,7 @@ export function postMeetup(meetup) {
  */
 export function putMeetup(meetup) {
   // TODO: реализовать функцию
+  return httpClient.put(`/meetups`, meetup);
 }
 
 /**
@@ -41,7 +43,8 @@ export function putMeetup(meetup) {
  * @returns {Promise<ResultContainer<void>>}
  */
 export function deleteMeetup(id) {
-  // TODO: реализовать функцию
+  // TODO: реализовать функцию = Готово
+  return httpClient.delete(`/meetups/${id}`);
 }
 
 /**

@@ -16,6 +16,7 @@
   import LayoutMeetupForm from '../components/LayoutMeetupForm.vue';
   import { createMeetup } from '../services/meetupService.js';
   import { useHead } from '@unhead/vue';
+  import { postMeetup } from '../api/meetupsApi';
 
   export default {
     name: 'PageCreateMeetup',
@@ -41,6 +42,7 @@
       // Methods
       const submit = (value) => {
         console.log(value);
+        postMeetup(value);
       };
 
       const cancel = () => {

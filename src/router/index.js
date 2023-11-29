@@ -65,8 +65,13 @@ export const routes = [
     component: () => import('../views/PageCreateMeetup.vue'),
   },
   {
+    // TODO: Добавить страницу редактирования митапа = Готово
     path: '/meetups/:meetupId(\\d+)/edit',
-    // TODO: Добавить страницу редактирования митапа
+    name: 'meetupEdit',
+    props: (to) => ({
+      meetupId: +to.params.meetupId,
+    }),
+    component: () => import('../views/PageEditMeetup.vue'),
   },
   // TODO: Task 05-vue-router/02-PageNotFound
   {
