@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
+import { setUserLS, getUserLS, removeUserLS } from '../services/authService';
 import { loginUser, logoutUser, getUser } from '../api/authApi';
 
 export const useAuthStore = defineStore('auth', () => {
-  const user = ref(null);
+  const user = ref(getUserLS());
   const isAuthenticated = computed(() => !!user.value);
 
   const setUser = (value) => {
@@ -11,12 +12,15 @@ export const useAuthStore = defineStore('auth', () => {
   };
 
   const login = async (email, password) => {
-    user.value = await loginUser(email, password);
+    const user = await loginUser(email, password);
+    setUser(user);
+    setUserLS(user);
   };
 
   const logout = async () => {
     await logoutUser();
     setUser(null);
+    removeUserLS();
   };
 
   // TODO: Добавить метод актуализации данных пользователя с API
@@ -28,8 +32,8 @@ export const useAuthStore = defineStore('auth', () => {
     user,
     isAuthenticated,
     setUser,
+    getAuthUser,
     login,
     logout,
-    getAuthUser,
   };
 });

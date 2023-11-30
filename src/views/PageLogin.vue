@@ -44,17 +44,19 @@
 <script>
   // TODO: Task 05-vue-router/01-AuthPages
   // TODO: Добавить именованные маршруты
-  import { useAuthStore } from '../stores/useAuthStore';
-  import { useRouter } from 'vue-router';
-
+  // import { useAuthStore } from '../stores/useAuthStore';
   import { ref } from 'vue';
+  import { useRouter } from 'vue-router';
+  import { useHead } from '@unhead/vue';
+  import { useToaster } from '../plugins/toaster';
+  import { useAuthStore } from '../stores/useAuthStore';
+
   import UiFormGroup from '../components/UiFormGroup.vue';
   import UiLink from '../components/UiLink.vue';
   import UiInput from '../components/UiInput.vue';
   import UiButton from '../components/UiButton.vue';
   import UiForm from '../components/UiForm.vue';
   import LayoutAuth from '../components/LayoutAuth.vue';
-  import { useHead } from '@unhead/vue';
 
   export default {
     name: 'PageLogin',
@@ -70,11 +72,7 @@
 
     setup() {
       // TODO: <title> "Вход | Meetups" == Готово
-      useHead({
-        title: 'Вход | Meetups',
-      });
       // TODO: Добавить LayoutAuth == Готово
-
       /*
       TODO: Добавить обработчик сабмита
             - В случае успешной аутентификации:
@@ -83,20 +81,29 @@
             - В случае неуспешной аутентификации:
               - Вывести тост "Неверные учётные данные..."
      */
+      useHead({
+        title: 'Вход | Meetups',
+      });
+
       const router = useRouter();
-      const authStore = useAuthStore();
 
       const email = ref('demo@email');
       const password = ref('password');
 
       // Methods
-      const handleSubmit = async () => {
-        try {
-          await authStore.login(email.value, password.value);
-          router.push({ name: 'index' });
-        } catch (e) {
-          console.log(e);
-        }
+      const handleSubmit = () => {
+        const authStore = useAuthStore();
+        const result = authStore.login(email.value, password.value);
+
+        console.log(result);
+        // try {
+        //   console.log(1);
+        //   login(email.value, password.value);
+        //   // router.push({ name: 'index' });
+        // } catch (e) {
+        //   console.log(e);
+        //   // useToaster();
+        // }
       };
 
       return {

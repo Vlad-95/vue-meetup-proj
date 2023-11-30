@@ -55,6 +55,8 @@
     setup(props) {
       // TODO: <title> "Редактирование митапа | Meetups" == Готово
       // TODO: Добавить LayoutMeetupForm == Готово
+      // TODO: При сабмите формы редактирования митапа - обновить его через API и перейти на страницу изменённого митапа == Готово
+      // TODO: При нажатии на "Отмена" вернуться на страницу этого митапа == Готово
       const router = useRouter();
 
       const meetup = ref(null);
@@ -78,15 +80,12 @@
 
       watch(() => props.meetupId, fetchMeetup);
 
-      // TODO: При сабмите формы редактирования митапа - обновить его через API и перейти на страницу изменённого митапа
-      // TODO: При нажатии на "Отмена" вернуться на страницу этого митапа
-
       // Methods
       const setMeetup = (value) => (meetup.value = value);
 
       const submit = (value) => {
-        console.log(value);
         putMeetup(value);
+        router.push({ name: 'meetup', params: { meetupId: meetup.id } });
       };
 
       const cancel = () => {

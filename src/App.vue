@@ -44,14 +44,13 @@
 
       // TODO: для авторизованных пользователей - запросить новые данные пользователя для актуализации и проверки актуальности
       onMounted(async () => {
-        try {
-          const response = await authStore.getAuthUser();
-          console.log(response);
-
-          authStore.setUser(response);
-        } catch (e) {
-          console.log(e);
-        }
+        // try {
+        //   const response = await authStore.getAuthUser();
+        //   console.log(response);
+        //   authStore.setUser(response);
+        // } catch (e) {
+        //   console.log(e);
+        // }
       });
 
       httpClient.onUnauthenticated(() => {
