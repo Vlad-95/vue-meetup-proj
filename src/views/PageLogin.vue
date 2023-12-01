@@ -43,7 +43,6 @@ import { useRouter } from 'vue-router';
 import { useHead } from '@unhead/vue';
 import { useToaster } from '../plugins/toaster';
 import { useAuthStore } from '../stores/useAuthStore';
-import { getUserLS } from '../services/authService';
 
 import UiFormGroup from '../components/UiFormGroup.vue';
 import UiLink from '../components/UiLink.vue';
@@ -75,7 +74,7 @@ export default {
     // TODO: <title> "Вход | Meetups" == Готово
     // TODO: Добавить LayoutAuth == Готово
     /*
-      TODO: Добавить обработчик сабмита
+      TODO: Добавить обработчик сабмита == Готово
             - В случае успешной аутентификации:
               - Перейти на главную страницу или from (Task 05-vue-router/01-AuthPages)
               - Вывести тост "Авторизация прошла успешно"
