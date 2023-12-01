@@ -76,14 +76,6 @@ export default {
     // Methods
     const handlelogout = async () => {
       await authStore.logout();
-
-      // try {
-      //   await logout();
-      //   // router.push({ name: 'index' });
-      // } catch (e) {
-      //   console.log(e);
-      //   // useToaster();
-      // }
     };
 
     return {
