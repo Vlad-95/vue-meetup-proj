@@ -21,19 +21,12 @@
       </UiFormGroup>
 
       <template #buttons>
-        <UiButton
-          variant="primary"
-          type="submit"
-          block
-          >Войти</UiButton
-        >
+        <UiButton variant="primary" type="submit" block>Войти</UiButton>
       </template>
 
       <template #append>
         Нет аккаунта?
-        <UiLink
-          :to="{ name: 'register' }"
-          class="link"
+        <UiLink :to="{ name: 'register' }" class="link"
           >Зарегистрируйтесь</UiLink
         >
       </template>
@@ -42,38 +35,46 @@
 </template>
 
 <script>
-  // TODO: Task 05-vue-router/01-AuthPages
-  // TODO: Добавить именованные маршруты
-  // import { useAuthStore } from '../stores/useAuthStore';
-  import { ref } from 'vue';
-  import { useRouter } from 'vue-router';
-  import { useHead } from '@unhead/vue';
-  import { useToaster } from '../plugins/toaster';
-  import { useAuthStore } from '../stores/useAuthStore';
+// TODO: Task 05-vue-router/01-AuthPages
+// TODO: Добавить именованные маршруты
+// import { useAuthStore } from '../stores/useAuthStore';
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { useHead } from '@unhead/vue';
+import { useToaster } from '../plugins/toaster';
+import { useAuthStore } from '../stores/useAuthStore';
+import { getUserLS } from '../services/authService';
 
-  import UiFormGroup from '../components/UiFormGroup.vue';
-  import UiLink from '../components/UiLink.vue';
-  import UiInput from '../components/UiInput.vue';
-  import UiButton from '../components/UiButton.vue';
-  import UiForm from '../components/UiForm.vue';
-  import LayoutAuth from '../components/LayoutAuth.vue';
+import UiFormGroup from '../components/UiFormGroup.vue';
+import UiLink from '../components/UiLink.vue';
+import UiInput from '../components/UiInput.vue';
+import UiButton from '../components/UiButton.vue';
+import UiForm from '../components/UiForm.vue';
+import LayoutAuth from '../components/LayoutAuth.vue';
 
-  export default {
-    name: 'PageLogin',
+export default {
+  name: 'PageLogin',
 
-    components: {
-      UiForm,
-      UiButton,
-      UiInput,
-      UiLink,
-      UiFormGroup,
-      LayoutAuth,
+  components: {
+    UiForm,
+    UiButton,
+    UiInput,
+    UiLink,
+    UiFormGroup,
+    LayoutAuth,
+  },
+
+  props: {
+    query: {
+      type: String,
+      required: false,
     },
+  },
 
-    setup() {
-      // TODO: <title> "Вход | Meetups" == Готово
-      // TODO: Добавить LayoutAuth == Готово
-      /*
+  setup(props) {
+    // TODO: <title> "Вход | Meetups" == Готово
+    // TODO: Добавить LayoutAuth == Готово
+    /*
       TODO: Добавить обработчик сабмита
             - В случае успешной аутентификации:
               - Перейти на главную страницу или from (Task 05-vue-router/01-AuthPages)
@@ -81,38 +82,40 @@
             - В случае неуспешной аутентификации:
               - Вывести тост "Неверные учётные данные..."
      */
-      useHead({
-        title: 'Вход | Meetups',
-      });
+    useHead({
+      title: 'Вход | Meetups',
+    });
 
-      const router = useRouter();
+    const router = useRouter();
+    const toaster = useToaster();
 
-      const email = ref('demo@email');
-      const password = ref('password');
+    const email = ref('demo@email');
+    const password = ref('password');
 
-      // Methods
-      const handleSubmit = () => {
-        const authStore = useAuthStore();
-        const result = authStore.login(email.value, password.value);
+    // Methods
+    const handleSubmit = async () => {
+      const authStore = useAuthStore();
+      await authStore.login(email.value, password.value);
 
-        console.log(result);
-        // try {
-        //   console.log(1);
-        //   login(email.value, password.value);
-        //   // router.push({ name: 'index' });
-        // } catch (e) {
-        //   console.log(e);
-        //   // useToaster();
-        // }
-      };
+      if (authStore.user.success) {
+        toaster.success('Авторизация прошла успешно');
+        if (props.query) {
+          router.push({ path: props.query });
+        } else {
+          router.push({ name: 'index' });
+        }
+      } else {
+        toaster.error(authStore.user.error.message);
+      }
+    };
 
-      return {
-        email,
-        password,
-        handleSubmit,
-      };
-    },
-  };
+    return {
+      email,
+      password,
+      handleSubmit,
+    };
+  },
+};
 </script>
 
 <style scoped></style>

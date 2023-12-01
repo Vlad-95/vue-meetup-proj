@@ -5,7 +5,9 @@ import { loginUser, logoutUser, getUser } from '../api/authApi';
 
 export const useAuthStore = defineStore('auth', () => {
   const user = ref(getUserLS());
-  const isAuthenticated = computed(() => !!user.value);
+  const isAuthenticated = computed(() =>
+    !!user.value ? user.value.success : false
+  );
 
   const setUser = (value) => {
     user.value = value;
