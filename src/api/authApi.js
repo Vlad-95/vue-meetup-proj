@@ -24,7 +24,9 @@ export function loginUser(email, password) {
  * @returns {Promise<ResultContainer<User>>}
  */
 export function registerUser(user) {
+  console.log(user);
   // TODO: реализовать функцию
+  return httpClient.post('/auth/register', { ...user });
 }
 
 /**
