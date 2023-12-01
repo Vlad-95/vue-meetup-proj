@@ -35,9 +35,8 @@
 </template>
 
 <script>
-// TODO: Task 05-vue-router/01-AuthPages
-// TODO: Добавить именованные маршруты
-// import { useAuthStore } from '../stores/useAuthStore';
+// TODO: Task 05-vue-router/01-AuthPages == Готово
+// TODO: Добавить именованные маршруты == Готово
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useHead } from '@unhead/vue';
