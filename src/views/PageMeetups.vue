@@ -105,8 +105,8 @@ export default {
   },
 
   setup() {
-    // const router = useRouter();
-    // const route = useRoute();
+    const router = useRouter();
+    const route = useRoute();
     const { meetups } = useMeetupsFetch();
 
     const { filteredMeetups, filter, dateFilterOptions } =
@@ -123,16 +123,35 @@ export default {
              - Вынесите эту логику в универсальный компосабл useQuerySync
              - Будущая задача composition/useQuerySync
      */
-    const { queryStringView } = useQuerySync();
+    const { queryStringFilter } = useQuerySync();
 
-    watch(view, () => {
-      queryStringView.value = view.value;
-    });
+    // console.log(queryStringFilter);
+
+    // watch(view, () => {
+    //   queryStringView.value = view.value;
+    // });
+
+    // watch(
+    //   route.query,
+    //   () => {
+    //     console.log(route.query);
+    //     const dateQuery = route.query.date ? route.query.date : 'all';
+    //     const searchQuery = route.query.search ? route.query.search : '';
+    //     const participationQuery = route.query.participation
+    //       ? route.query.participation
+    //       : 'all';
+
+    //     filter.value.date = dateQuery;
+    //     filter.value.search = searchQuery;
+    //     filter.value.participation = participationQuery;
+    //   },
+    //   { immediate: true }
+    // );
 
     watch(
       filter,
       () => {
-        queryStringView.value = view.value;
+        queryStringFilter.value = filter.value;
       },
       { deep: true }
     );
