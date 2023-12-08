@@ -123,7 +123,8 @@ export default {
              - Вынесите эту логику в универсальный компосабл useQuerySync
              - Будущая задача composition/useQuerySync
      */
-    const { queryStringFilter } = useQuerySync();
+    const { changeQueryFromFilter, changeQueryFromUrl, queryStringFilter } =
+      useQuerySync();
 
     // console.log(queryStringFilter);
 
@@ -134,7 +135,6 @@ export default {
     // watch(
     //   route.query,
     //   () => {
-    //     console.log(route.query);
     //     const dateQuery = route.query.date ? route.query.date : 'all';
     //     const searchQuery = route.query.search ? route.query.search : '';
     //     const participationQuery = route.query.participation
@@ -149,9 +149,25 @@ export default {
     // );
 
     watch(
-      filter,
+      view.value,
       () => {
-        queryStringFilter.value = filter.value;
+        changeQueryFromFilter(filter, view, route.query);
+      },
+      { immediate: true }
+    );
+
+    watch(
+      route.query,
+      () => {
+        changeQueryFromUrl(filter, route.query);
+      },
+      { immediate: true }
+    );
+
+    watch(
+      filter.value,
+      () => {
+        changeQueryFromFilter(filter, view, route.query);
       },
       { deep: true }
     );
