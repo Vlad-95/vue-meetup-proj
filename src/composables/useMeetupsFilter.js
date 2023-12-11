@@ -1,6 +1,9 @@
-import { computed, ref } from 'vue';
+import { computed, ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 
 export function useMeetupsFilter(meetups) {
+  const router = useRouter();
+
   const filter = ref({
     date: 'all',
     participation: 'all',
@@ -30,7 +33,25 @@ export function useMeetupsFilter(meetups) {
         .toLowerCase()
         .includes(filter.value.search.toLowerCase());
 
-    return meetups.value.filter((meetup) => dateFilter(meetup) && participationFilter(meetup) && searchFilter(meetup));
+    return meetups.value.filter(
+      (meetup) =>
+        dateFilter(meetup) &&
+        participationFilter(meetup) &&
+        searchFilter(meetup)
+    );
+  });
+
+  // Обновляем значение participation при изменении маршрута
+  router.beforeEach((to, from, next) => {
+    const participation = to.query.participation;
+
+    if (participation) {
+      filter.value.participation = participation;
+    } else {
+      filter.value.participation = 'all';
+    }
+
+    next();
   });
 
   return {

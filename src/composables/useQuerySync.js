@@ -1,80 +1,59 @@
-import { ref, watch } from 'vue';
-import { useRouter } from 'vue-router';
+import { watch, onMounted } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 
-export function useQuerySync() {
+export function useQuerySync(filter, view) {
   const router = useRouter();
-  // const queryStringFilter = ref(null);
+  const route = useRoute();
 
-  // watch(
-  //   queryStringFilter,
-  //   () => {
-  //     queryStringUpdate();
-  //   },
-  //   { deep: true }
-  // );
+  // Функция для обновления адресной строки при изменении фильтров
+  const updateFiltersInURL = () => {
+    const params = {};
 
-  // const queryStringUpdate = () => {
-  //   const queryDate = queryStringFilter.value.date;
-  //   const queryParticipation = queryStringFilter.value.participation;
-  //   const querySearch = queryStringFilter.value.search;
-
-  //   let resultQuery = {};
-
-  //   if (queryDate != 'all') {
-  //     resultQuery.date = queryDate;
-  //   } else {
-  //     delete resultQuery.date;
-  //   }
-
-  //   if (queryParticipation != 'all') {
-  //     resultQuery.participation = queryParticipation;
-  //   } else {
-  //     delete resultQuery.participation;
-  //   }
-
-  //   if (querySearch != '') {
-  //     resultQuery.search = querySearch;
-  //   } else {
-  //     delete resultQuery.search;
-  //   }
-
-  //   router.push({ query: resultQuery });
-  // };
-
-  const changeQueryFromFilter = (filter, view, queries) => {
-    const filterDate = filter.value.date;
-    const filterParticipation = filter.value.participation;
-    const filterSearch = filter.value.search;
-    const viewType = view.value;
-
-    let resultQuery = {};
-
-    if (filterDate != 'all') {
-      resultQuery.date = filterDate;
+    if (filter.value.date != 'all') {
+      params.date = filter.value.date;
     } else {
-      delete resultQuery.date;
+      delete params.date;
     }
 
-    if (filterParticipation != 'all') {
-      resultQuery.participation = filterParticipation;
+    if (filter.value.participation != 'all') {
+      params.participation = filter.value.participation;
     } else {
-      delete resultQuery.participation;
+      delete params.participation;
     }
 
-    if (filterSearch != '') {
-      resultQuery.search = filterSearch;
+    if (filter.value.search != '') {
+      params.search = filter.value.search;
     } else {
-      delete resultQuery.search;
+      delete params.search;
     }
 
-    router.push({ query: { ...resultQuery } });
+    if (view.value != 'list') {
+      params.view = view.value;
+    } else {
+      delete params.view;
+    }
+
+    router.replace({ query: params });
   };
 
-  const changeQueryFromUrl = (filter, queries) => {};
+  // Функция для обновления фильтров при изменении адресной строки
+  const updateFiltersFromURL = () => {
+    const { query } = route;
 
-  return {
-    // queryStringFilter,
-    changeQueryFromFilter,
-    changeQueryFromUrl,
+    filter.value.date = query.date || 'all';
+    filter.value.participation = query.participation || 'all';
+    filter.value.search = query.search || '';
+
+    view.value = query.view || 'list';
   };
+
+  // Следим за изменениями фильтров и обновляем адресную строку
+  watch([filter, view], updateFiltersInURL, { deep: true });
+
+  // Синхронизируем фильтры при монтировании компонента
+  onMounted(() => {
+    updateFiltersFromURL();
+  });
+
+  return filter;
 }

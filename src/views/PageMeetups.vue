@@ -59,7 +59,10 @@
       </div>
     </div>
 
-    <KeepAlive v-if="meetups" include="MeetupsCalendar">
+    <KeepAlive
+      v-if="meetups"
+      include="MeetupsCalendar"
+    >
       <component
         :is="viewComponent"
         v-if="filteredMeetups.length"
@@ -72,49 +75,47 @@
 </template>
 
 <script>
-import { computed, ref, watch } from 'vue';
-import MeetupsList from '../components/MeetupsList.vue';
-import MeetupsCalendar from '../components/MeetupsCalendar.vue';
-import UiRadioGroup from '../components/UiRadioGroup.vue';
-import UiButtonGroup from '../components/UiButtonGroup.vue';
-import UiContainer from '../components/UiContainer.vue';
-import UiAlert from '../components/UiAlert.vue';
-import UiIcon from '../components/UiIcon.vue';
-import UiButtonGroupItem from '../components/UiButtonGroupItem.vue';
-import UiFormGroup from '../components/UiFormGroup.vue';
-import UiInput from '../components/UiInput.vue';
-import UiTransitionGroupFade from '../components/UiTransitionGroupFade.vue';
-import { useMeetupsFetch } from '../composables/useMeetupsFetch.js';
-import { useMeetupsFilter } from '../composables/useMeetupsFilter.js';
-import { useQuerySync } from '../composables/useQuerySync';
-import { useRoute, useRouter } from 'vue-router';
+  import { computed, onMounted, ref, watch } from 'vue';
+  import MeetupsList from '../components/MeetupsList.vue';
+  import MeetupsCalendar from '../components/MeetupsCalendar.vue';
+  import UiRadioGroup from '../components/UiRadioGroup.vue';
+  import UiButtonGroup from '../components/UiButtonGroup.vue';
+  import UiContainer from '../components/UiContainer.vue';
+  import UiAlert from '../components/UiAlert.vue';
+  import UiIcon from '../components/UiIcon.vue';
+  import UiButtonGroupItem from '../components/UiButtonGroupItem.vue';
+  import UiFormGroup from '../components/UiFormGroup.vue';
+  import UiInput from '../components/UiInput.vue';
+  import UiTransitionGroupFade from '../components/UiTransitionGroupFade.vue';
+  import { useMeetupsFetch } from '../composables/useMeetupsFetch.js';
+  import { useMeetupsFilter } from '../composables/useMeetupsFilter.js';
+  import { useQuerySync } from '../composables/useQuerySync';
+  import { useRoute, useRouter } from 'vue-router';
 
-export default {
-  name: 'PageMeetups',
+  export default {
+    name: 'PageMeetups',
 
-  components: {
-    UiTransitionGroupFade,
-    UiInput,
-    UiFormGroup,
-    UiButtonGroupItem,
-    UiIcon,
-    UiRadioGroup,
-    UiButtonGroup,
-    UiContainer,
-    UiAlert,
-  },
+    components: {
+      UiTransitionGroupFade,
+      UiInput,
+      UiFormGroup,
+      UiButtonGroupItem,
+      UiIcon,
+      UiRadioGroup,
+      UiButtonGroup,
+      UiContainer,
+      UiAlert,
+    },
 
-  setup() {
-    const router = useRouter();
-    const route = useRoute();
-    const { meetups } = useMeetupsFetch();
+    setup() {
+      const { meetups } = useMeetupsFetch();
 
-    const { filteredMeetups, filter, dateFilterOptions } =
-      useMeetupsFilter(meetups);
+      const { filteredMeetups, filter, dateFilterOptions } =
+        useMeetupsFilter(meetups);
 
-    const view = ref('list');
+      const view = ref('list');
 
-    /*
+      /*
        TODO: Добавить синхронизацию фильтров и view с одноимёнными query параметрами
              - Измерение параметров фильтрации и view должны изменять query параметры маршрута
                - date, participation, search, view
@@ -123,97 +124,50 @@ export default {
              - Вынесите эту логику в универсальный компосабл useQuerySync
              - Будущая задача composition/useQuerySync
      */
-    const { changeQueryFromFilter, changeQueryFromUrl, queryStringFilter } =
-      useQuerySync();
+      const syncQueries = useQuerySync(filter, view);
 
-    // console.log(queryStringFilter);
+      const viewComponent = computed(() => {
+        const viewToComponents = {
+          list: MeetupsList,
+          calendar: MeetupsCalendar,
+        };
+        return viewToComponents[view.value];
+      });
 
-    // watch(view, () => {
-    //   queryStringView.value = view.value;
-    // });
-
-    // watch(
-    //   route.query,
-    //   () => {
-    //     const dateQuery = route.query.date ? route.query.date : 'all';
-    //     const searchQuery = route.query.search ? route.query.search : '';
-    //     const participationQuery = route.query.participation
-    //       ? route.query.participation
-    //       : 'all';
-
-    //     filter.value.date = dateQuery;
-    //     filter.value.search = searchQuery;
-    //     filter.value.participation = participationQuery;
-    //   },
-    //   { immediate: true }
-    // );
-
-    watch(
-      view.value,
-      () => {
-        changeQueryFromFilter(filter, view, route.query);
-      },
-      { immediate: true }
-    );
-
-    watch(
-      route.query,
-      () => {
-        changeQueryFromUrl(filter, route.query);
-      },
-      { immediate: true }
-    );
-
-    watch(
-      filter.value,
-      () => {
-        changeQueryFromFilter(filter, view, route.query);
-      },
-      { deep: true }
-    );
-
-    const viewComponent = computed(() => {
-      const viewToComponents = {
-        list: MeetupsList,
-        calendar: MeetupsCalendar,
+      return {
+        meetups,
+        filter: syncQueries,
+        filteredMeetups,
+        dateFilterOptions,
+        view,
+        viewComponent,
+        // queryString,
       };
-      return viewToComponents[view.value];
-    });
-
-    return {
-      meetups,
-      filter,
-      filteredMeetups,
-      dateFilterOptions,
-      view,
-      viewComponent,
-      // queryString,
-    };
-  },
-};
+    },
+  };
 </script>
 
 <style scoped>
-.filters-panel {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  margin: 40px 0 32px 0;
-}
-
-.filters-panel__col {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-}
-
-@media all and (max-width: 767px) {
   .filters-panel {
-    flex-direction: column;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 40px 0 32px 0;
   }
 
-  .filters-panel__col + .filters-panel__col {
-    margin-top: 16px;
+  .filters-panel__col {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
   }
-}
+
+  @media all and (max-width: 767px) {
+    .filters-panel {
+      flex-direction: column;
+    }
+
+    .filters-panel__col + .filters-panel__col {
+      margin-top: 16px;
+    }
+  }
 </style>
