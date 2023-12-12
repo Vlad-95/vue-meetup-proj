@@ -51,6 +51,8 @@
 </template>
 
 <script>
+  import { useAuthStore } from '../stores/useAuthStore';
+
   import MeetupCover from './MeetupCover.vue';
   import MeetupInfo from './MeetupInfo.vue';
   import UiContainer from './UiContainer.vue';
@@ -82,6 +84,17 @@
             - Текст ошибки в случае ошибки на API
      */
       // TODO: Будет плюсом блокировать кнопку на время загрузки
+
+      const authStore = useAuthStore();
+      const test = async () => {
+        return await authStore.getAuthUser();
+      };
+
+      console.log();
+
+      return {
+        test,
+      };
     },
   };
 </script>
