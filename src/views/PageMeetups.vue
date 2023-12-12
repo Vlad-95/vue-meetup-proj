@@ -75,7 +75,7 @@
 </template>
 
 <script>
-  import { computed, onMounted, ref, watch } from 'vue';
+  import { computed, ref } from 'vue';
   import MeetupsList from '../components/MeetupsList.vue';
   import MeetupsCalendar from '../components/MeetupsCalendar.vue';
   import UiRadioGroup from '../components/UiRadioGroup.vue';
@@ -90,7 +90,6 @@
   import { useMeetupsFetch } from '../composables/useMeetupsFetch.js';
   import { useMeetupsFilter } from '../composables/useMeetupsFilter.js';
   import { useQuerySync } from '../composables/useQuerySync';
-  import { useRoute, useRouter } from 'vue-router';
 
   export default {
     name: 'PageMeetups',
@@ -108,15 +107,8 @@
     },
 
     setup() {
-      const { meetups } = useMeetupsFetch();
-
-      const { filteredMeetups, filter, dateFilterOptions } =
-        useMeetupsFilter(meetups);
-
-      const view = ref('list');
-
       /*
-       TODO: Добавить синхронизацию фильтров и view с одноимёнными query параметрами
+       TODO: Добавить синхронизацию фильтров и view с одноимёнными query параметрами == ГОТОВО
              - Измерение параметров фильтрации и view должны изменять query параметры маршрута
                - date, participation, search, view
              - При значениях по умолчанию (all, list) query параметр добавляться не должен
@@ -124,6 +116,13 @@
              - Вынесите эту логику в универсальный компосабл useQuerySync
              - Будущая задача composition/useQuerySync
      */
+      const { meetups } = useMeetupsFetch();
+
+      const { filteredMeetups, filter, dateFilterOptions } =
+        useMeetupsFilter(meetups);
+
+      const view = ref('list');
+
       const syncQueries = useQuerySync(filter, view);
 
       const viewComponent = computed(() => {
@@ -141,7 +140,6 @@
         dateFilterOptions,
         view,
         viewComponent,
-        // queryString,
       };
     },
   };
