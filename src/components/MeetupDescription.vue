@@ -1,22 +1,29 @@
 <template>
-  <div>Task 02-components/01-MeetupDescription</div>
+  <p class="meetup-description">{{ description }}</p>
 </template>
 
 <script>
-// TODO: Task 02-components/01-MeetupDescription
+  // TODO: Task 02-components/01-MeetupDescription == Готово
 
-export default {
-  name: 'MeetupDescription',
-};
+  export default {
+    name: 'MeetupDescription',
+
+    props: {
+      description: {
+        type: String,
+        required: false,
+      },
+    },
+  };
 </script>
 
 <style scoped>
-/* _meetup-description.css */
-.meetup-description {
-  padding-top: 33px;
-  margin-bottom: 24px;
-  font-size: 18px;
-  line-height: 28px;
-  white-space: pre-wrap;
-}
+  /* _meetup-description.css */
+  .meetup-description {
+    padding-top: 33px;
+    margin-bottom: 24px;
+    font-size: 18px;
+    line-height: 28px;
+    white-space: pre-wrap;
+  }
 </style>
